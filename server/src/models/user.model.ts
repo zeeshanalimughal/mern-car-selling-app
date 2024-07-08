@@ -1,11 +1,16 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Document, Model, Schema } from "mongoose";
 import bcrypt from "bcrypt";
 
 export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
-  isAdmin: boolean;
+  matchPassword(enteredPassword: string): Promise<boolean>;
+  emailExists(email: string): Promise<boolean>;
+}
+
+export interface IUserModel extends Model<IUser> {
+  emailExists(email: string): Promise<boolean>;
 }
 
 const userSchema: Schema = new Schema(
@@ -23,13 +28,8 @@ const userSchema: Schema = new Schema(
       type: String,
       required: [true, "Please provide a password"],
     },
-    isAdmin: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
   },
-  { timestamps: true }
+  { timestamps: true, versionKey: false }
 );
 
 // Encrypt password before saving to database
@@ -43,10 +43,19 @@ userSchema.pre<IUser & Document>("save", async function (next) {
 });
 
 // Match user entered password to hashed password in database
-userSchema.methods.matchPassword = async function (enteredPassword: string) {
+userSchema.methods.matchPassword = async function (
+  enteredPassword: string
+): Promise<boolean> {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-const User = mongoose.model<IUser>("User", userSchema);
+// Check if user email already exists
+userSchema.statics.emailExists = async function (
+  email: string
+): Promise<boolean> {
+  return await this.exists({ email });
+};
+
+const User = mongoose.model<IUser, IUserModel>("User", userSchema);
 
 export default User;

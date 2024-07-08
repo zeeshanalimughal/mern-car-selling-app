@@ -2,7 +2,7 @@ import { Router } from "express";
 
 export default (router: Router) => {
   /**
-   * @route GET /v1/test
+   * @route GET /test
    * @desc Test route
    * @access Public
    */

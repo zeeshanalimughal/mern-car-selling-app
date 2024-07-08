@@ -30,13 +30,13 @@ function bootstrapServer() {
     res.json({ message: "Hello World!" });
   });
 
+  // Routes middleware
+  app.use("/api", appRouter());
+
   // Handle undefined routes
   app.all("*", (req: Request, res: Response, next: NextFunction) => {
     next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
   });
-
-  // Routes middleware
-  app.use("/api", appRouter());
 
   // Global error handling middleware
   app.use(errorHandler);

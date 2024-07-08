@@ -1,20 +1,24 @@
 import { Router } from "express";
 import { authController } from "../controllers/auth.controller";
-
-const authRouter: Router = Router();
+import { validate } from "../middlewares/validate";
+import { loginSchema, registerSchema } from "../validators/authValidators";
 
 export default (router: Router) => {
   /**
-   * @route POST /v1/auth/register
+   * @route POST /auth/register
    * @desc Register route
    * @access Public
    * */
-  router.post("/auth/register", authController.register);
+  router.post(
+    "/auth/register",
+    validate(registerSchema),
+    authController.register
+  );
 
   /**
-   * @route POST /v1/auth/login
+   * @route POST /auth/login
    * @desc Login route
    * @access Public
    */
-  router.post("/auth/login", authController.login);
+  router.post("/auth/login", validate(loginSchema), authController.login);
 };
