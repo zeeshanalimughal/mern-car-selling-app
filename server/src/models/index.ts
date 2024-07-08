@@ -1,3 +1,3 @@
 import User from "./user.model";
-
-export { User };
+import Car from "./car.model";
+export { User, Car };

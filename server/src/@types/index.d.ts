@@ -1,9 +1,13 @@
 import type { Request } from "express";
+import { IUser } from "../models/user.model";
 
 declare global {
   namespace Express {
     interface Request {
-      user?: unknown;
+      user: {
+        id: string;
+        email: string;
+      };
     }
   }
 }

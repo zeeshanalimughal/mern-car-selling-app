@@ -7,7 +7,9 @@ import AppError from "./errors/ApiError";
 import errorHandler from "./middlewares/errorHandler";
 import connectDB from "./lib/db";
 import cors from "cors";
-import appRouter from "./routes";
+import appRouter from "./routes/index";
+import fileUpload from "express-fileupload";
+
 Promise.all([]).then(bootstrapServer).catch(handleServerInitError);
 
 /**
@@ -19,10 +21,17 @@ function bootstrapServer() {
 
   // Middlewares
   app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
   app.use(
     cors({
       origin: config.ALLOWED_ORIGIN,
       methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    })
+  );
+
+  app.use(
+    fileUpload({
+      limits: { fileSize: 50 * 1024 * 1024 },
     })
   );
 

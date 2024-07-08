@@ -1,34 +1,41 @@
+// middleware/authMiddleware.ts
+
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import { User } from "../models";
 import { config } from "../config/env";
-import AppError from "../errors/ApiError";
+import { verifyToken } from "../utils/jwtUtil";
 
 const secretKey = config.JWT_SECRET;
 
-/**
- * Middleware to check if the user is authenticated.
- * @param req - Express request object.
- * @param res - Express response object.
- * @param next - Express next middleware function.
- */
-export function isAuthenticated(
+export const isAuthenticated = async (
   req: Request,
   res: Response,
   next: NextFunction
-): Response | void {
+): Promise<void> => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "Invalid Token" });
+    res.status(401).json({ message: "No token provided or invalid format" });
+    return;
   }
 
   const token = authHeader.split(" ")[1];
 
   try {
-    const decoded = jwt.verify(token, secretKey);
-    req.user = decoded;
+    const decoded = verifyToken(token as string) as { id: string };
+
+    const user = await User.findById(decoded.id, { email: 1 }).lean().exec();
+    if (!user) {
+      res.status(401).json({ message: "Invalid token" });
+      return;
+    }
+    req.user = {
+      id: user._id?.toString(),
+      email: user.email,
+    };
     next();
   } catch (err) {
-    throw new AppError("Invalid Token", 401);
+    res.status(401).json({ message: "Invalid token" });
   }
-}
+};
