@@ -9,7 +9,8 @@ import connectDB from "./lib/db";
 import cors from "cors";
 import appRouter from "./routes/index";
 import fileUpload from "express-fileupload";
-
+import bodyParser from "body-parser";
+import path from "path";
 Promise.all([]).then(bootstrapServer).catch(handleServerInitError);
 
 /**
@@ -20,20 +21,16 @@ function bootstrapServer() {
   const PORT = config.PORT;
 
   // Middlewares
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: false }));
   app.use(
     cors({
-      origin: config.ALLOWED_ORIGIN,
+      origin: `${config.ALLOWED_ORIGIN}`,
       methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     })
   );
-
-  app.use(
-    fileUpload({
-      limits: { fileSize: 50 * 1024 * 1024 },
-    })
-  );
+  app.use(express.static(path.join(process.cwd(), "src/public")));
+  app.use(fileUpload());
 
   app.get("/", (req: Request, res: Response) => {
     res.json({ message: "Hello World!" });
