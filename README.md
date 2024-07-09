@@ -2,6 +2,18 @@
 
 This guide outlines the necessary steps and environment variables required to configure the application. These variables should be set in a `.env` file located in the root of your project directory.
 
+## SCREENSHOTS
+### Register Page
+![Register Page](images/1.png)
+### Login Page
+![Login Page](images/2.png)
+### Add Car Page
+![Add Car Page](images/3.png)
+### Listing Page
+![Listing Page](images/4.png)
+
+
+
 ## Initial Setup
 
 Before setting up the environment variables, ensure you have navigated to the server directory and installed the necessary dependencies:
@@ -73,6 +85,7 @@ After installing the dependencies, you need to set up the environment variables.
 NEXT_PUBLIC_SERVER_BASE_URL="http://localhost:3001/api"
 AUTH_SECRET="secret"
 NEXT_PUBLIC_UPLOADS_URL="http://localhost:3001/uploads"
+AUTH_TRUST_HOST=http://localhost:3000
 ```
 # Client Scripts
 

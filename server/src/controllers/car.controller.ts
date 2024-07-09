@@ -9,7 +9,6 @@ export const carController = {
    * @desc Create a car
    */
   create: catchAsync(async (req: Request, res: Response) => {
-    console.log(req.body);
     // save the images
     const images = req.files?.pictures;
     const pictures = [];
