@@ -1,6 +1,6 @@
 # Application Configuration Guide
 
-This guide outlines the necessary steps and environment variables required to configure the application. These variables should be set in a `.env` file located in the root of your project directory.
+This guide outlines the necessary steps and environment variables required to configure the application. These variables should be set in a `.env` file located in the root of your server and client directory of the project.
 
 ## SCREENSHOTS
 ### Register Page
