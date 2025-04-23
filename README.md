@@ -2,18 +2,6 @@
 
 This guide outlines the necessary steps and environment variables required to configure the application. These variables should be set in a `.env` file located in the root of your server and client directory of the project.
 
-## SCREENSHOTS
-### Register Page
-![Register Page](images/1.png)
-### Login Page
-![Login Page](images/2.png)
-### Add Car Page
-![Add Car Page](images/3.png)
-### Listing Page
-![Listing Page](images/4.png)
-
-
-
 ## Initial Setup
 
 Before setting up the environment variables, ensure you have navigated to the server directory and installed the necessary dependencies:
